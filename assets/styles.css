@@ -1,0 +1,148 @@
+/*
+ * Cheminformatics Virtual Laboratory - Scientific Workstation Theme
+ * Professional, restrained palette: Neutral charcoal, off-white, muted olive/green accents, subtle amber.
+ */
+
+:root {
+    --bg-main: #0F141C;
+    --bg-surface: #171D26;
+    --bg-surface-alt: #1F2633;
+    --border-color: #2D3748;
+    --border-light: #3E4C5E;
+    --accent-green: #2EA043;
+    --accent-olive: #3FB950;
+    --accent-blue: #388BFD;
+    --accent-amber: #D29922;
+    --text-primary: #E6EDF3;
+    --text-secondary: #8B949E;
+    --text-muted: #6E7681;
+    --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+
+/* Base Workstation Adjustments */
+.stApp {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+}
+
+/* Top Workstation Header */
+.lab-header {
+    border-bottom: 1px solid var(--border-color);
+    padding: 6px 0 16px 0;
+    margin-bottom: 18px;
+}
+
+.lab-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.lab-subtitle {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+/* Scientific Cards & Panels */
+.sci-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+}
+
+.sci-card-header {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Notation Badges & Monospace Tags */
+.formula-badge {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: #58A6FF;
+    background-color: rgba(56, 139, 253, 0.12);
+    border: 1px solid rgba(56, 139, 253, 0.3);
+    border-radius: 3px;
+    padding: 2px 7px;
+    font-size: 0.82rem;
+}
+
+.smiles-badge {
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+    background-color: var(--bg-surface-alt);
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    padding: 2px 8px;
+    font-size: 0.82rem;
+    word-break: break-all;
+}
+
+.badge-tag {
+    background-color: rgba(46, 160, 67, 0.15);
+    color: var(--accent-olive);
+    border: 1px solid rgba(46, 160, 67, 0.35);
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 0.78rem;
+    font-weight: 500;
+}
+
+.badge-amber {
+    background-color: rgba(210, 153, 34, 0.15);
+    color: var(--accent-amber);
+    border: 1px solid rgba(210, 153, 34, 0.35);
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 0.78rem;
+}
+
+/* Metric Display Overrides */
+[data-testid="stMetricValue"] {
+    font-family: var(--font-mono) !important;
+    font-size: 1.3rem !important;
+    font-weight: 600 !important;
+    color: var(--text-primary) !important;
+}
+
+[data-testid="stMetricLabel"] {
+    font-size: 0.78rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+    color: var(--text-secondary) !important;
+}
+
+/* Clean Data Tables */
+.stDataFrame {
+    border: 1px solid var(--border-color) !important;
+    border-radius: 4px;
+}
+
+/* Form Inputs & Buttons */
+.stTextInput input,
+.stTextArea textarea,
+.stSelectbox div {
+    font-family: var(--font-mono) !important;
+    font-size: 0.88rem !important;
+    border-color: var(--border-color) !important;
+    border-radius: 3px !important;
+}
+
+.stButton button {
+    border-radius: 3px !important;
+    font-size: 0.86rem !important;
+    border: 1px solid var(--border-color) !important;
+    font-weight: 500 !important;
+}
