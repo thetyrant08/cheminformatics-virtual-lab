@@ -102,21 +102,19 @@ Vetri chemtool/
 
 ---
 
-## 5. Vercel Deployment Evaluation
+## 5. Vercel Deployment Configuration (Vercel Services)
 
-### Frontend Deployment on Vercel: Fully Feasible
-The React + Vite + TypeScript frontend can be deployed directly to Vercel as a high-performance static SPA:
-- Pre-configured `frontend/vercel.json` provides client-side routing rewrites.
-- Set Root Directory in Vercel to `frontend`.
-- Build command: `npm run build`. Output directory: `dist`.
-- Set Environment Variable: `VITE_API_URL=https://<your-backend-service>.onrender.com`.
+The project is configured for deployment entirely on Vercel under a single deployment and domain using **Vercel Services**:
 
-### Backend Deployment on Vercel Serverless: Not Recommended
-- **RDKit Binary Size Limit:** RDKit compiles into native C++ shared libraries (`.so`) that exceed 120MB uncompressed. Vercel Serverless Functions have a strict 50MB zipped / 250MB uncompressed limit, causing frequent bundle deployment errors.
-- **Cold Starts & Conformer Generation:** Generating 3D distance geometry conformers via ETKDG and optimizing geometry with MMFF94 force fields can exceed Vercel free-tier execution timeouts (10–15s).
-- **Recommended Backend Hosting:**
-  1. **Render.com / Railway / Fly.io / GCP Cloud Run:** Deploy the `backend/` directory as a persistent Docker container or Python web service running `uvicorn app:app --host 0.0.0.0 --port $PORT`.
-  2. **Hugging Face Spaces:** Free Docker/Python space tailored for cheminformatics and computational science APIs.
+- **Unified Root `vercel.json`:** Defines multi-service orchestration with independent builds for `frontend` (Vite) and `backend` (FastAPI).
+- **Internal Routing:** Incoming requests to `/api/(.*)` are transparently routed to the FastAPI backend service; all other routes fallback to the Vite React frontend.
+- **Single Domain:** No CORS configuration or external backend URLs are required because frontend and backend share the same deployment origin.
+
+### Deploying on Vercel:
+1. Go to **[vercel.com/new](https://vercel.com/new)** and import `cheminformatics-virtual-lab`.
+2. Vercel will detect the root `vercel.json` and select the **Services** preset.
+3. Keep the Root Directory as the repository root (`./`).
+4. Click **Deploy**. Both the Vite frontend and Python FastAPI backend will build and deploy under one single domain.
 
 ---
 

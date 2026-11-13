@@ -11,7 +11,7 @@ if backend_dir not in sys.path:
 
 from io import BytesIO
 from typing import List, Dict, Any, Optional
-from fastapi import FastAPI, HTTPException, Response
+from fastapi import FastAPI, HTTPException, Response, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
@@ -44,6 +44,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+router = APIRouter()
 
 
 # ==============================================================================
@@ -85,10 +87,10 @@ class AssessmentSubmitRequest(BaseModel):
 
 
 # ==============================================================================
-# API ENDPOINTS
+# API ENDPOINTS (ROUTER)
 # ==============================================================================
 
-@app.get("/api/health")
+@router.get("/health")
 def health_check():
     """Health check endpoint and library versions."""
     import rdkit
@@ -99,13 +101,13 @@ def health_check():
     }
 
 
-@app.get("/api/examples")
+@router.get("/examples")
 def get_example_molecules():
     """Return dictionary of reference example molecules."""
     return {"examples": EXAMPLE_MOLECULES}
 
 
-@app.post("/api/molecule/info")
+@router.post("/molecule/info")
 def get_molecule_info(req: MoleculeRequest):
     """
     Complete structural characterization endpoint:
@@ -165,7 +167,7 @@ def get_molecule_info(req: MoleculeRequest):
     }
 
 
-@app.post("/api/molecule/2d-svg")
+@router.post("/molecule/2d-svg")
 def get_molecule_svg(req: MoleculeRequest):
     """Generate 2D SVG with customizable atom numbering and highlight atoms."""
     mol, err = get_molecule(req.smiles)
@@ -181,7 +183,7 @@ def get_molecule_svg(req: MoleculeRequest):
     return Response(content=svg_2d, media_type="image/svg+xml")
 
 
-@app.post("/api/compare")
+@router.post("/compare")
 def compare_molecules(req: CompareRequest):
     """
     Compare multiple molecules side by side:
@@ -236,7 +238,7 @@ def compare_molecules(req: CompareRequest):
     }
 
 
-@app.post("/api/export/pdf/single")
+@router.post("/export/pdf/single")
 def export_single_pdf(req: SingleReportRequest):
     """Generate and return single-molecule ReportLab PDF report."""
     mol, err = get_molecule(req.smiles)
@@ -256,7 +258,7 @@ def export_single_pdf(req: SingleReportRequest):
     )
 
 
-@app.post("/api/export/pdf/multi")
+@router.post("/export/pdf/multi")
 def export_multi_pdf(req: MultiReportRequest):
     """Generate and return multi-molecule ReportLab student analysis PDF report."""
     if not req.smiles_list:
@@ -393,7 +395,7 @@ ASSESSMENT_QUESTIONS = [
 ]
 
 
-@app.get("/api/assessment/questions")
+@router.get("/assessment/questions")
 def get_assessment_questions():
     """Return the assessment questions list (without answers)."""
     public_questions = [
@@ -407,7 +409,7 @@ def get_assessment_questions():
     return {"questions": public_questions}
 
 
-@app.post("/api/assessment/submit")
+@router.post("/assessment/submit")
 def submit_assessment(req: AssessmentSubmitRequest):
     """
     Score the assessment submission and return the score, percentage,
@@ -454,6 +456,22 @@ def submit_assessment(req: AssessmentSubmitRequest):
         "percentage": percentage,
         "performance": performance,
         "details": feedback_details
+    }
+
+
+# Include router with and without /api prefix for universal routing
+app.include_router(router, prefix="/api")
+app.include_router(router)
+
+
+@app.get("/")
+def root():
+    """Service status and discovery endpoint."""
+    return {
+        "service": "Cheminformatics Virtual Laboratory API",
+        "status": "online",
+        "version": "2.0.0",
+        "docs": "/docs"
     }
 
 
